@@ -14,3 +14,6 @@ Animate a zoom into the Mandelbrot set, in Fortran!
 
 ## Combine frames into movie
 `ffmpeg.exe -i frames\example_%d.ppm -c:v libx264 -pix_fmt yuv420p example-movie.mp4`
+
+## Finished product
+https://www.youtube.com/watch?v=a4WoTi00l24
