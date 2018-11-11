@@ -2,8 +2,9 @@
 Animate a zoom into the Mandelbrot set, in Fortran!
 
 ## Prerequisites
-- gfortran (other Fortran compilers may work)
-- ffmpeg
+- [gfortran](http://www.mingw.org/) (other Fortran compilers may work)
+- [ffmpeg](https://www.ffmpeg.org/download.html)
+- Optional:  [GIMP](https://www.gimp.org/downloads/) to view images of individual frames in PPM format
 
 ## Build
 `.\compile.cmd`
