@@ -6,6 +6,10 @@ Animate a zoom into the Mandelbrot set, in Fortran!
 - [ffmpeg](https://www.ffmpeg.org/download.html)
 - Optional:  [GIMP](https://www.gimp.org/downloads/) to view images of individual frames in PPM format
 
+## Download
+git clone https://github.com/JeffIrwin/mandelbrotZoom
+cd mandelbrotZoom
+
 ## Build
 `.\compile.cmd`
 
