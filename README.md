@@ -8,6 +8,7 @@ Animate a zoom into the Mandelbrot set, in Fortran!
 
 ## Download
 `git clone https://github.com/JeffIrwin/mandelbrotZoom`
+
 `cd mandelbrotZoom`
 
 ## Build
