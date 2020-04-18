@@ -9,7 +9,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macOS-latest]
+        os: [windows-latest, macOS-latest]
         #os: [ubuntu-latest]
 
     steps:
@@ -17,6 +17,6 @@ jobs:
     - name: Clean, build, and test
       run: |
         git submodule update --init --recursive
-        sudo apt-get install gfortran
+        #sudo apt-get install gfortran
         bash ./test.sh
 
