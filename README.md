@@ -1,3 +1,5 @@
+![](https://github.com/JeffIrwin/mandelbrotZoom/workflows/CI/badge.svg)
+
 # mandelbrotZoom
 Animate a zoom into the Mandelbrot set, in Fortran!
 
