@@ -1,5 +1,4 @@
 #!/bin/bash
 
-rm fractal.exe
-rm fmod.mod
+rm -rf target
 

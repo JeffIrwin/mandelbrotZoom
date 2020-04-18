@@ -26,9 +26,9 @@ chmod +x ./build.sh
 pwd=$(pwd)
 
 if [[ $machine == "Linux" || $machine == "Mac" ]]; then
-	exe=$exebase
+	exe=./target/$exebase
 else
-	exe=$exebase.exe
+	exe=./target/$exebase.exe
 fi
 
 echo "==============================================================================="
