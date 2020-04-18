@@ -242,7 +242,8 @@ use fmod
 
 implicit none
 
-character :: fname*256, ct*6, fdir*256
+character :: fname*256, ct*6
+character(len = :), allocatable :: fdir
 
 double precision :: xmin, xmax, ymin, ymax, dx, dy, escape, h
 double precision :: xmin0, ymin0, xmax0, ymax0, xc, yc, zoom, znt
@@ -422,7 +423,7 @@ do it = 0, nt
 !$OMP end do
 !$OMP end parallel
 
-  call writepbm(frm, b, trim(fdir)//'/'//trim(fname)//'_'//trim(ct))
+  call writepbm(frm, b, fdir//'/'//trim(fname)//'_'//trim(ct))
 
 end do         ! it
 
