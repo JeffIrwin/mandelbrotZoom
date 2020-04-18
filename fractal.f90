@@ -336,7 +336,9 @@ else
 end if
 
 fdir = 'frames'
-call system('mkdir "'//fdir//'" > NUL 2>&1')
+
+! TODO:  hide errors for all OSs
+call system('mkdir "'//fdir//'"')
 
 znt = zoom ** (1.d0 / dble(nt))
 
