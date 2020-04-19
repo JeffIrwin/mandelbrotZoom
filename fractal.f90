@@ -103,7 +103,7 @@ do ix = 1, 300
   end do
 end do
 
-io = writepbm(6, b, 'test')
+io = writepnm(6, b, 'test')
 if (io /= 0) stop
 
 end subroutine testpbm
@@ -301,7 +301,7 @@ do it = 0, nt
 !$OMP end do
 !$OMP end parallel
 
-  io = writepbm(frm, b, fdir//'/'//trim(fname)//'_'//trim(ct))
+  io = writepnm(frm, b, fdir//'/'//trim(fname)//'_'//trim(ct))
   if (io /= 0) stop
 
 end do         ! it
