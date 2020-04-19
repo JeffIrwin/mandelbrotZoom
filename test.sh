@@ -65,6 +65,7 @@ for i in "${inputdir}/*.${inputext}"; do
 	"${pwd}/${exe}" < "$ib"
 
 	if [[ "$?" != "0" ]]; then
+		# TODO: don't double count diff failures after failing here
 		nfail=$((nfail + 1))
 		echo "test.sh:  error:  cannot run test $i"
 	fi
