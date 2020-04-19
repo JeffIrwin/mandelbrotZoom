@@ -19,13 +19,13 @@ set(CMAKE_Fortran_COMPILER "gfortran")
 
 project(${PROJECT} Fortran)
 
-#set(SUBMODULE_DIR submodules)
+set(SUBMODULE_DIR submodules)
 
 set(PNMIO pnmio)
-add_subdirectory(${PNMIO})
+add_subdirectory(${SUBMODULE_DIR}/${PNMIO})
 
 add_executable(${PROJECT} fractal.f90 ${PNMIO})
 
-include_directories(${CMAKE_CURRENT_BINARY_DIR}/${PNMIO})
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/${SUBMODULE_DIR}/${PNMIO})
 target_link_libraries(${PROJECT} ${PNMIO})
 
