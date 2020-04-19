@@ -24,7 +24,7 @@ set(SUBMODULE_DIR submodules)
 set(PNMIO pnmio)
 add_subdirectory(${SUBMODULE_DIR}/${PNMIO})
 
-add_executable(${PROJECT} fractal.f90 ${PNMIO})
+add_executable(${PROJECT} fractal.f90)
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR}/${SUBMODULE_DIR}/${PNMIO})
 target_link_libraries(${PROJECT} ${PNMIO})
