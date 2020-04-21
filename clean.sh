@@ -1,4 +1,4 @@
 #!/bin/bash
 
-rm -rf target
+source ./submodules/bat/clean.sh
 

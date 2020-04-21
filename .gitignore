@@ -5,5 +5,5 @@ frames
 *.mp4
 
 # CMake output directory
-target/
+build/
 
