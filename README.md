@@ -14,13 +14,15 @@ Animate a zoom into the Mandelbrot set, in Fortran!
 `cd mandelbrotZoom`
 
 ## Build
-`.\compile.cmd`
+Use CMake, or run the provided CMake wrapper script:
+
+    ./build.sh
 
 ## Run
-`.\fractal.exe < example-input.txt`
+`./build/fractal.exe < inputs/example-0.txt`
 
 ## Combine frames into movie
-`ffmpeg.exe -i frames\example_%d.ppm -c:v libx264 -pix_fmt yuv420p example-movie.mp4`
+`ffmpeg.exe -i frames/example-0_%d.ppm -c:v libx264 -pix_fmt yuv420p example-movie.mp4`
 
 ## Finished product
 https://www.youtube.com/watch?v=a4WoTi00l24
