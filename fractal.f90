@@ -99,8 +99,8 @@ integer function nitrescape(c, maxitr, escape, f)
 double precision, intent(in) :: escape
 
 double complex, intent(in) :: c
-!double complex, external :: f
-procedure(function_template), pointer :: f
+double complex, external :: f
+!procedure(function_template), pointer :: f
 double complex :: z
 
 integer, intent(in) :: maxitr
@@ -284,11 +284,12 @@ do it = 0, nt
   x = [(xmin + dble(i) * dx, i = 0, nx - 1)]
   y = [(ymin + dble(i) * dy, i = 0, ny - 1)]
 
-  if (ifractal == 1) then
-    fiterator => fmandelbrot
-  else
-    fiterator => fship
-  end if
+  !! Works on Windows but not Ubuntu?
+  !if (ifractal == 1) then
+  !  fiterator => fmandelbrot
+  !else
+  !  fiterator => fship
+  !end if
 
 !$OMP parallel shared(b, x, y, nx, ny, maxitr, escape, frm)
 !$OMP do schedule(dynamic)
@@ -297,14 +298,14 @@ do it = 0, nt
 
       c = complex(x(ix), y(iy))
 
-      nitr = nitrescape(c, maxitr, escape, fiterator)
+      !nitr = nitrescape(c, maxitr, escape, fiterator)
 
-      !! Avoid condition branches in big loops!
-      !if (ifractal == 1) then
-      !  nitr = nitrescape(c, maxitr, escape, fmandelbrot)
-      !else
-      !  nitr = nitrescape(c, maxitr, escape, fship)
-      !end if
+      ! Avoid condition branches in big loops!
+      if (ifractal == 1) then
+        nitr = nitrescape(c, maxitr, escape, fmandelbrot)
+      else
+        nitr = nitrescape(c, maxitr, escape, fship)
+      end if
 
       if (debug >= 3) print *, 'nitr = ', nitr
 
