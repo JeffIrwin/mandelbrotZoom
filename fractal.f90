@@ -8,6 +8,18 @@ double precision, parameter :: e = exp(1.d0)
 
 integer, parameter :: debug = 2
 
+!********
+
+abstract interface
+
+  double complex function function_template(z, c)
+  double complex :: z, c
+  end function function_template
+
+end interface
+
+!********
+
 contains
 
 !=======================================================================
@@ -82,27 +94,22 @@ end function fship
 
 !=======================================================================
 
-integer function nitrescape(c, maxitr, escape, ifractal)
+integer function nitrescape(c, maxitr, escape, f)
 
 double precision, intent(in) :: escape
 
 double complex, intent(in) :: c
+!double complex, external :: f
+procedure(function_template), pointer :: f
 double complex :: z
 
-integer, intent(in) :: maxitr, ifractal
+integer, intent(in) :: maxitr
 
 z = c
 nitrescape = 0
 do while (nitrescape < maxitr .and. abs(z) < escape)
   nitrescape = nitrescape + 1
-
-  ! TODO:  make this a callback passed as an arg.  Performance may benefit
-  if (ifractal == 1) then
-    z = fmandelbrot(z, c)
-  else
-    z = fship(z, c)
-  end if
-
+  z = f(z, c)
 end do
 
 end function nitrescape
@@ -149,6 +156,8 @@ double precision :: dxmax, dxmin, dymax, dymin, hm
 double precision, allocatable :: x(:), y(:)
 
 double complex :: c
+!double complex, external :: f
+procedure(function_template), pointer :: fiterator
 
 integer :: nx, ny, maxitr, i, ix, iy, nitr, t0, t, crate, frm, nt, it, io, &
     ifractal
@@ -275,13 +284,28 @@ do it = 0, nt
   x = [(xmin + dble(i) * dx, i = 0, nx - 1)]
   y = [(ymin + dble(i) * dy, i = 0, ny - 1)]
 
+  if (ifractal == 1) then
+    fiterator => fmandelbrot
+  else
+    fiterator => fship
+  end if
+
 !$OMP parallel shared(b, x, y, nx, ny, maxitr, escape, frm)
 !$OMP do schedule(dynamic)
   do iy = 1, ny
     do ix = 1, nx
 
       c = complex(x(ix), y(iy))
-      nitr = nitrescape(c, maxitr, escape, ifractal)
+
+      nitr = nitrescape(c, maxitr, escape, fiterator)
+
+      !! Avoid condition branches in big loops!
+      !if (ifractal == 1) then
+      !  nitr = nitrescape(c, maxitr, escape, fmandelbrot)
+      !else
+      !  nitr = nitrescape(c, maxitr, escape, fship)
+      !end if
+
       if (debug >= 3) print *, 'nitr = ', nitr
 
       if (frm == 1) then
