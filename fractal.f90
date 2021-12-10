@@ -60,29 +60,49 @@ end function hsv2rgb
 
 !=======================================================================
 
-double complex function f(z, c)
+double complex function fmandelbrot(z, c)
 
 double complex :: z, c
 
-f = z ** 2 + c
+fmandelbrot = z ** 2 + c
 
-end function f
+end function fmandelbrot
 
 !=======================================================================
 
-integer function nitrescape(c, maxitr, escape)
+double complex function fship(z, c)
 
-double precision :: escape
+! Burning ship
 
-double complex :: c, z
+double complex :: z, c
 
-integer :: maxitr
+fship = complex(abs(realpart(z)), abs(imagpart(z))) ** 2 + c
+
+end function fship
+
+!=======================================================================
+
+integer function nitrescape(c, maxitr, escape, ifractal)
+
+double precision, intent(in) :: escape
+
+double complex, intent(in) :: c
+double complex :: z
+
+integer, intent(in) :: maxitr, ifractal
 
 z = c
 nitrescape = 0
 do while (nitrescape < maxitr .and. abs(z) < escape)
   nitrescape = nitrescape + 1
-  z = f(z, c)
+
+  ! TODO:  make this a callback passed as an arg.  Performance may benefit
+  if (ifractal == 1) then
+    z = fmandelbrot(z, c)
+  else
+    z = fship(z, c)
+  end if
+
 end do
 
 end function nitrescape
@@ -130,7 +150,8 @@ double precision, allocatable :: x(:), y(:)
 
 double complex :: c
 
-integer :: nx, ny, maxitr, i, ix, iy, nitr, t0, t, crate, frm, nt, it, io
+integer :: nx, ny, maxitr, i, ix, iy, nitr, t0, t, crate, frm, nt, it, io, &
+    ifractal
 !integer, allocatable :: b(:,:)
 character, allocatable :: b(:,:)
 
@@ -187,6 +208,11 @@ write(*,*) 'Enter file name:'
 read(*,*) fname
 
 write(*,*)
+write(*,*) 'Enter fractal iteration function (1 for Mandelbrot or' &
+    //' 2 for burning ship):'
+read(*,*) ifractal
+
+write(*,*)
 write(*,*) '====================================================='
 
 write(*,*)
@@ -201,6 +227,7 @@ write(*,*) 'Frames             = ', nt
 write(*,*) 'Image size         = ', nx, ny
 write(*,*) 'Hue multiplier     = ', hm
 write(*,*) 'File name          = ', trim(fname)
+write(*,*) 'Fractal iterator   = ', ifractal
 
 write(*,*)
 write(*,*) '====================================================='
@@ -254,7 +281,7 @@ do it = 0, nt
     do ix = 1, nx
 
       c = complex(x(ix), y(iy))
-      nitr = nitrescape(c, maxitr, escape)
+      nitr = nitrescape(c, maxitr, escape, ifractal)
       if (debug >= 3) print *, 'nitr = ', nitr
 
       if (frm == 1) then

@@ -2,11 +2,11 @@
 2                                                # escape radius
 30                                               # maxitr
 -2.3704 1.1852                                   # initial x bounds
--1 1                                             # initial y bounds
+-2 0.75                                          # initial y bounds
 -1.0416442625659015e+00  3.3667097987040967e-01  # zoom center
 5.0e2                                            # final zoom magnification
 15                                               # number of frames - 1
 640 360                                          # image size
 1.0                                              # Hue multiplier
-example-0                                        # file name prefix
-1                                                # iterator func enum
+example-1                                        # file name prefix
+2                                                # iterator func enum
