@@ -284,7 +284,7 @@ do it = 0, nt
   x = [(xmin + dble(i) * dx, i = 0, nx - 1)]
   y = [(ymin + dble(i) * dy, i = 0, ny - 1)]
 
-  !! Works on Windows but not Ubuntu?
+  !! Works on Windows but not Ubuntu?  gfortran version diff?
   !if (ifractal == 1) then
   !  fiterator => fmandelbrot
   !else
