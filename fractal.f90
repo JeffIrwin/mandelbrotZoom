@@ -76,6 +76,7 @@ double complex function fmandelbrot(z, c)
 
 double complex :: z, c
 
+!print *, 'mandelbrot'
 fmandelbrot = z ** 2 + c
 
 end function fmandelbrot
@@ -88,6 +89,7 @@ double complex function fship(z, c)
 
 double complex :: z, c
 
+!print *, 'ship'
 fship = complex(abs(realpart(z)), abs(imagpart(z))) ** 2 + c
 
 end function fship
@@ -99,7 +101,6 @@ integer function nitrescape(c, maxitr, escape, f)
 double precision, intent(in) :: escape
 
 double complex, intent(in) :: c
-!double complex, external :: f
 procedure(function_template), pointer :: f
 double complex :: z
 
@@ -156,7 +157,6 @@ double precision :: dxmax, dxmin, dymax, dymin, hm
 double precision, allocatable :: x(:), y(:)
 
 double complex :: c
-!double complex, external :: f
 procedure(function_template), pointer :: fiterator
 
 integer :: nx, ny, maxitr, i, ix, iy, nitr, t0, t, crate, frm, nt, it, io, &
@@ -290,21 +290,13 @@ do it = 0, nt
   x = [(xmin + dble(i) * dx, i = 0, nx - 1)]
   y = [(ymin + dble(i) * dy, i = 0, ny - 1)]
 
-!$OMP parallel shared(b, x, y, nx, ny, maxitr, escape, frm)
+!$OMP parallel private(c, nitr, h)
 !$OMP do schedule(dynamic)
   do iy = 1, ny
     do ix = 1, nx
 
       c = complex(x(ix), y(iy))
-
       nitr = nitrescape(c, maxitr, escape, fiterator)
-
-      !! Avoid condition branches in big loops!
-      !if (ifractal == 1) then
-      !  nitr = nitrescape(c, maxitr, escape, fmandelbrot)
-      !else
-      !  nitr = nitrescape(c, maxitr, escape, fship)
-      !end if
 
       if (debug >= 3) print *, 'nitr = ', nitr
 
