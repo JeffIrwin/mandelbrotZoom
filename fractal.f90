@@ -98,13 +98,15 @@ end function fship
 
 integer function nitrescape(c, maxitr, escape, f)
 
-double precision, intent(in) :: escape
-
 double complex, intent(in) :: c
-procedure(itr_func_interface), pointer :: f
-double complex :: z
 
 integer, intent(in) :: maxitr
+
+double precision, intent(in) :: escape
+
+procedure(itr_func_interface), pointer :: f
+
+double complex :: z
 
 z = c
 nitrescape = 0
