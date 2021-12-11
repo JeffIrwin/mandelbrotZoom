@@ -12,9 +12,9 @@ integer, parameter :: debug = 2
 
 abstract interface
 
-  double complex function function_template(z, c)
+  double complex function itr_func_interface(z, c)
   double complex :: z, c
-  end function function_template
+  end function itr_func_interface
 
 end interface
 
@@ -101,7 +101,7 @@ integer function nitrescape(c, maxitr, escape, f)
 double precision, intent(in) :: escape
 
 double complex, intent(in) :: c
-procedure(function_template), pointer :: f
+procedure(itr_func_interface), pointer :: f
 double complex :: z
 
 integer, intent(in) :: maxitr
@@ -142,7 +142,7 @@ end module fmod
 
 !=======================================================================
 
-program fractal
+subroutine fractal
 
 use fmod
 
@@ -156,8 +156,7 @@ double precision :: xmin0, ymin0, xmax0, ymax0, xc, yc, zoom, znt
 double precision :: dxmax, dxmin, dymax, dymin, hm
 double precision, allocatable :: x(:), y(:)
 
-double complex :: c
-procedure(function_template), pointer :: fiterator
+procedure(itr_func_interface), pointer :: fiterator
 
 integer :: nx, ny, maxitr, i, ix, iy, nitr, t0, t, crate, frm, nt, it, io, &
     ifractal
@@ -268,6 +267,7 @@ else
   fiterator => fship
 end if
 
+! "Time" loop which changes zoom level
 do it = 0, nt
 
   write(*, '(a, i0)') 'frame = ', it
@@ -290,13 +290,14 @@ do it = 0, nt
   x = [(xmin + dble(i) * dx, i = 0, nx - 1)]
   y = [(ymin + dble(i) * dy, i = 0, ny - 1)]
 
-!$OMP parallel private(c, nitr, h)
+  ! Space loop over x/y pixel coordinates
+
+!$OMP parallel private(nitr, h)
 !$OMP do schedule(dynamic)
   do iy = 1, ny
     do ix = 1, nx
 
-      c = complex(x(ix), y(iy))
-      nitr = nitrescape(c, maxitr, escape, fiterator)
+      nitr = nitrescape(complex(x(ix), y(iy)), maxitr, escape, fiterator)
 
       if (debug >= 3) print *, 'nitr = ', nitr
 
@@ -338,6 +339,7 @@ do it = 0, nt
 
         end if ! RGB color map style
       end if   ! frm
+
     end do     ! ix
   end do       ! iy
 
@@ -356,4 +358,15 @@ write(*,*)
 write(*,*) 'Elapsed time = ', dble(t - t0) / dble(crate)
 write(*,*)
 
-end program fractal
+end subroutine fractal
+
+!=======================================================================
+
+program main
+
+  call fractal()
+
+end program main
+
+!=======================================================================
+
