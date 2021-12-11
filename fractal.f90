@@ -99,8 +99,8 @@ integer function nitrescape(c, maxitr, escape, f)
 double precision, intent(in) :: escape
 
 double complex, intent(in) :: c
-double complex, external :: f
-!procedure(function_template), pointer :: f
+!double complex, external :: f
+procedure(function_template), pointer :: f
 double complex :: z
 
 integer, intent(in) :: maxitr
@@ -262,6 +262,12 @@ dxmin = xc - xmin0
 dymax = ymax0 - yc
 dymin = yc - ymin0
 
+if (ifractal == 1) then
+  fiterator => fmandelbrot
+else
+  fiterator => fship
+end if
+
 do it = 0, nt
 
   write(*, '(a, i0)') 'frame = ', it
@@ -284,13 +290,6 @@ do it = 0, nt
   x = [(xmin + dble(i) * dx, i = 0, nx - 1)]
   y = [(ymin + dble(i) * dy, i = 0, ny - 1)]
 
-  !! Works on Windows but not Ubuntu?  gfortran version diff?
-  !if (ifractal == 1) then
-  !  fiterator => fmandelbrot
-  !else
-  !  fiterator => fship
-  !end if
-
 !$OMP parallel shared(b, x, y, nx, ny, maxitr, escape, frm)
 !$OMP do schedule(dynamic)
   do iy = 1, ny
@@ -298,14 +297,14 @@ do it = 0, nt
 
       c = complex(x(ix), y(iy))
 
-      !nitr = nitrescape(c, maxitr, escape, fiterator)
+      nitr = nitrescape(c, maxitr, escape, fiterator)
 
-      ! Avoid condition branches in big loops!
-      if (ifractal == 1) then
-        nitr = nitrescape(c, maxitr, escape, fmandelbrot)
-      else
-        nitr = nitrescape(c, maxitr, escape, fship)
-      end if
+      !! Avoid condition branches in big loops!
+      !if (ifractal == 1) then
+      !  nitr = nitrescape(c, maxitr, escape, fmandelbrot)
+      !else
+      !  nitr = nitrescape(c, maxitr, escape, fship)
+      !end if
 
       if (debug >= 3) print *, 'nitr = ', nitr
 
