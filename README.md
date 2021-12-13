@@ -3,6 +3,8 @@
 # mandelbrotZoom
 Animate a zoom into the Mandelbrot set, in Fortran!
 
+Read the blog post on some of the techniques here:  https://www.jeffirwin.xyz/posts/2021-12-11-a
+
 ## Prerequisites
 - [gfortran](http://www.mingw.org/) (other Fortran compilers may work)
 - [ffmpeg](https://www.ffmpeg.org/download.html)
